@@ -14,7 +14,7 @@ github.com/paulmach/orb/geojson
 github.com/paulmach/orb/maptile
 github.com/paulmach/orb
 github.com/paulmach/orb/internal/mercator
-# github.com/sfomuseum/go-tilezen v0.0.0-20190829200520-f33916e51ba9
+# github.com/sfomuseum/go-tilezen v0.0.0-20190829211934-79a20478511a
 github.com/sfomuseum/go-tilezen
 # github.com/tidwall/gjson v1.3.2
 github.com/tidwall/gjson
@@ -24,5 +24,5 @@ github.com/tidwall/match
 github.com/tidwall/pretty
 # github.com/whosonfirst/algnhsa v0.1.0
 github.com/whosonfirst/algnhsa
-# github.com/whosonfirst/go-whosonfirst-cache v0.1.0
-github.com/whosonfirst/go-whosonfirst-cache
+# github.com/whosonfirst/go-cache v0.0.1
+github.com/whosonfirst/go-cache

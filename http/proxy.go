@@ -1,10 +1,12 @@
 package http
 
 import (
-	gohttp "net/http"
+	"context"
 	"github.com/sfomuseum/go-tilezen"
-	"github.com/whosonfirst/go-whosonfirst-cache"	
+	"github.com/whosonfirst/go-cache"
 	"io"
+	gohttp "net/http"
+	"time"
 )
 
 type TilezenProxyHandlerOptions struct {
@@ -18,7 +20,7 @@ func TilezenProxyHandler(proxy_opts *TilezenProxyHandlerOptions) (gohttp.Handler
 		path := req.URL.Path
 
 		tile, err := tilezen.ParseURI(path)
-		
+
 		if err != nil {
 			gohttp.Error(rsp, "Invalid path", gohttp.StatusBadRequest)
 			return
@@ -32,15 +34,18 @@ func TilezenProxyHandler(proxy_opts *TilezenProxyHandlerOptions) (gohttp.Handler
 			gohttp.Error(rsp, "Missing API key", gohttp.StatusBadRequest)
 			return
 		}
-		
+
 		tilezen_opts := &tilezen.Options{
 			ApiKey: api_key,
 		}
-		
-		t_rsp, err := tilezen.FetchTileWithCache(proxy_opts.Cache, tile, tilezen_opts)
-		
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		t_rsp, err := tilezen.FetchTileWithCache(ctx, proxy_opts.Cache, tile, tilezen_opts)
+
 		if err != nil {
-			gohttp.Error(rsp, err.Error(), gohttp.StatusInternalServerError)						
+			gohttp.Error(rsp, err.Error(), gohttp.StatusInternalServerError)
 			// gohttp.Error(rsp, err.Error(), gohttp.StatusBadRequest)
 			return
 		}
@@ -55,5 +60,5 @@ func TilezenProxyHandler(proxy_opts *TilezenProxyHandlerOptions) (gohttp.Handler
 		return
 	}
 
-	return gohttp.HandlerFunc(fn), nil	
+	return gohttp.HandlerFunc(fn), nil
 }

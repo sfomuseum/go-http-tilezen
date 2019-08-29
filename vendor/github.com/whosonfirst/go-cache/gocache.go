@@ -3,6 +3,7 @@ package cache
 // https://godoc.org/github.com/patrickmn/go-cache
 
 import (
+	"context"
 	gocache "github.com/patrickmn/go-cache"
 	"io"
 	"io/ioutil"
@@ -96,7 +97,7 @@ func (c *GoCache) Name() string {
 	return "gocache"
 }
 
-func (c *GoCache) Get(key string) (io.ReadCloser, error) {
+func (c *GoCache) Get(ctx context.Context, key string) (io.ReadCloser, error) {
 
 	// to do: timings that don't slow everything down the way
 	// go-whosonfirst-timer does now (20170915/thisisaaronland)
@@ -115,7 +116,7 @@ func (c *GoCache) Get(key string) (io.ReadCloser, error) {
 	return NewReadCloser(body), nil
 }
 
-func (c *GoCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
+func (c *GoCache) Set(ctx context.Context, key string, fh io.ReadCloser) (io.ReadCloser, error) {
 
 	/*
 
@@ -141,14 +142,10 @@ func (c *GoCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
 	return NewReadCloser(body), nil
 }
 
-func (c *GoCache) Unset(key string) error {
+func (c *GoCache) Unset(ctx context.Context, key string) error {
 	c.cache.Delete(key)
 	atomic.AddInt64(&c.keys, -1)
 	return nil
-}
-
-func (c *GoCache) Size() int64 {
-	return atomic.LoadInt64(&c.keys)
 }
 
 func (c *GoCache) Hits() int64 {
@@ -161,4 +158,12 @@ func (c *GoCache) Misses() int64 {
 
 func (c *GoCache) Evictions() int64 {
 	return atomic.LoadInt64(&c.evictions)
+}
+
+func (c *GoCache) Size() int64 {
+	return c.SizeWithContext(context.Background())
+}
+
+func (c *GoCache) SizeWithContext(ctx context.Context) int64 {
+	return atomic.LoadInt64(&c.keys)
 }

@@ -2,7 +2,7 @@ package cache
 
 import (
 	"bytes"
-	"fmt"
+	"context"
 	"io"
 	"io/ioutil"
 	_ "log"
@@ -10,36 +10,14 @@ import (
 
 type Cache interface {
 	Name() string
-	Get(string) (io.ReadCloser, error)
-	Set(string, io.ReadCloser) (io.ReadCloser, error)
-	Unset(string) error
+	Get(context.Context, string) (io.ReadCloser, error)
+	Set(context.Context, string, io.ReadCloser) (io.ReadCloser, error)
+	Unset(context.Context, string) error
 	Hits() int64
 	Misses() int64
 	Evictions() int64
 	Size() int64
-}
-
-type CacheMiss struct {
-	error string
-}
-
-func (m CacheMiss) Error() string {
-
-	return fmt.Sprintf("CACHE MISS %s", m.error)
-}
-
-func IsCacheMiss(e error) bool {
-
-	switch e.(type) {
-	case *CacheMiss:
-		return true
-	case CacheMiss:
-		return true
-	default:
-		// pass
-	}
-
-	return false
+	SizeWithContext(context.Context) int64
 }
 
 func NewReadCloser(b []byte) io.ReadCloser {
@@ -53,8 +31,10 @@ func NewReadCloserFromString(s string) io.ReadCloser {
 
 func SetString(c Cache, k string, v string) (string, error) {
 
+	ctx := context.Background()
+
 	r := NewReadCloserFromString(v)
-	fh, err := c.Set(k, r)
+	fh, err := c.Set(ctx, k, r)
 
 	if err != nil {
 		return "", err
@@ -67,7 +47,9 @@ func SetString(c Cache, k string, v string) (string, error) {
 
 func GetString(c Cache, k string) (string, error) {
 
-	fh, err := c.Get(k)
+	ctx := context.Background()
+
+	fh, err := c.Get(ctx, k)
 
 	if err != nil {
 		return "", err

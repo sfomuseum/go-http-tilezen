@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"github.com/sfomuseum/go-http-tilezen/http"
-	"github.com/sfomuseum/go-http-tilezen/server"	
-	"github.com/whosonfirst/go-whosonfirst-cache"
+	"github.com/sfomuseum/go-http-tilezen/server"
+	"github.com/whosonfirst/go-cache"
+	"log"
 	gohttp "net/http"
 	gourl "net/url"
 )
@@ -34,13 +34,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	go_cache, err := cache.NewGoCache(cache_opts)
-		
+
 	proxy_opts := &http.TilezenProxyHandlerOptions{
 		Cache: go_cache,
 	}
-	
+
 	proxy_handler, err := http.TilezenProxyHandler(proxy_opts)
 
 	if err != nil {
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	mux.Handle("/", proxy_handler)
-	
+
 	address := fmt.Sprintf("http://%s:%d", *host, *port)
 
 	u, err := gourl.Parse(address)
@@ -56,7 +56,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	s, err := server.NewStaticServer(*proto, u)
 
 	if err != nil {
@@ -70,5 +70,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 }

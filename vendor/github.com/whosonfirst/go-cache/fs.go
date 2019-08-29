@@ -3,6 +3,7 @@ package cache
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"errors"
 	"io"
 	_ "log"
@@ -62,7 +63,7 @@ func (c *FSCache) Name() string {
 	return "fs"
 }
 
-func (c *FSCache) Get(key string) (io.ReadCloser, error) {
+func (c *FSCache) Get(ctx context.Context, key string) (io.ReadCloser, error) {
 
 	c.mu.RLock()
 	defer c.mu.RUnlock()
@@ -91,7 +92,7 @@ func (c *FSCache) Get(key string) (io.ReadCloser, error) {
 
 		if diff >= time.Duration(c.TTL)*time.Second {
 
-			go c.Unset(key)
+			go c.Unset(ctx, key)
 
 			return nil, new(CacheMiss)
 		}
@@ -107,7 +108,7 @@ func (c *FSCache) Get(key string) (io.ReadCloser, error) {
 	return fh, nil
 }
 
-func (c *FSCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
+func (c *FSCache) Set(ctx context.Context, key string, fh io.ReadCloser) (io.ReadCloser, error) {
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -157,7 +158,7 @@ func (c *FSCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
 	return NewReadCloser(b.Bytes()), nil
 }
 
-func (c *FSCache) Unset(key string) error {
+func (c *FSCache) Unset(ctx context.Context, key string) error {
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -180,20 +181,23 @@ func (c *FSCache) Unset(key string) error {
 	return err
 }
 
-// TO DO: walk c.root
-
-func (c *FSCache) Size() int64 {
-	return 0
-}
-
 func (c *FSCache) Hits() int64 {
-	return c.hits
+	return atomic.LoadInt64(&c.hits)
 }
 
 func (c *FSCache) Misses() int64 {
-	return c.misses
+	return atomic.LoadInt64(&c.misses)
 }
 
 func (c *FSCache) Evictions() int64 {
-	return c.evictions
+	return atomic.LoadInt64(&c.evictions)
+}
+
+func (c *FSCache) Size() int64 {
+	return c.SizeWithContext(context.Background())
+}
+
+func (c *FSCache) SizeWithContext(ctx context.Context) int64 {
+	// TO DO: walk c.root
+	return -1
 }

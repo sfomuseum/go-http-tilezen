@@ -3,6 +3,7 @@ package cache
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -65,7 +66,7 @@ func (mc *MultiCache) Name() string {
 	return fmt.Sprintf("multi#%s", strings.Join(cache_names, ";"))
 }
 
-func (mc *MultiCache) Get(key string) (io.ReadCloser, error) {
+func (mc *MultiCache) Get(ctx context.Context, key string) (io.ReadCloser, error) {
 
 	var fh io.ReadCloser
 	var err error
@@ -77,7 +78,9 @@ func (mc *MultiCache) Get(key string) (io.ReadCloser, error) {
 
 	for _, c := range mc.caches {
 
-		fh, err = c.Get(key)
+		// check ctx.Done and return CacheMissDone
+
+		fh, err = c.Get(ctx, key)
 
 		if err != nil {
 
@@ -104,7 +107,7 @@ func (mc *MultiCache) Get(key string) (io.ReadCloser, error) {
 
 // in advance of requiring a ReadSeekCloser (20180617/thisisaaronland)
 
-func (mc *MultiCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
+func (mc *MultiCache) Set(ctx context.Context, key string, fh io.ReadCloser) (io.ReadCloser, error) {
 
 	var b bytes.Buffer
 	buf := bufio.NewWriter(&b)
@@ -128,11 +131,11 @@ func (mc *MultiCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
 
 	for _, c := range mc.caches {
 
-		_, err := c.Set(key, ioutil.NopCloser(r))
+		_, err := c.Set(ctx, key, ioutil.NopCloser(r))
 
 		if err != nil {
 
-			go mc.Unset(key)
+			go mc.Unset(ctx, key)
 			return nil, err
 		}
 
@@ -142,14 +145,14 @@ func (mc *MultiCache) Set(key string, fh io.ReadCloser) (io.ReadCloser, error) {
 	return ioutil.NopCloser(r), nil
 }
 
-func (mc *MultiCache) Unset(key string) error {
+func (mc *MultiCache) Unset(ctx context.Context, key string) error {
 
 	mc.mu.Lock()
 	defer mc.mu.Unlock()
 
 	for _, c := range mc.caches {
 
-		err := c.Unset(key)
+		err := c.Unset(ctx, key)
 
 		if err != nil {
 			return err
@@ -159,18 +162,22 @@ func (mc *MultiCache) Unset(key string) error {
 	return nil
 }
 
-func (mc *MultiCache) Size() int64 {
-	return 0
-}
-
 func (mc *MultiCache) Hits() int64 {
-	return 0
+	return -1
 }
 
 func (mc *MultiCache) Misses() int64 {
-	return 0
+	return -1
 }
 
 func (mc *MultiCache) Evictions() int64 {
-	return 0
+	return -1
+}
+
+func (mc *MultiCache) Size() int64 {
+	return -1
+}
+
+func (mc *MultiCache) SizeWithContext(ctx context.Context) int64 {
+	return -1
 }
