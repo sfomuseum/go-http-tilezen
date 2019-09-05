@@ -9,6 +9,7 @@ import (
 	"log"
 	gohttp "net/http"
 	gourl "net/url"
+	"time"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 	var proto = flag.String("protocol", "http", "The protocol for placeholder-client server to listen on. Valid protocols are: http, lambda.")
 	host := flag.String("host", "localhost", "The host to listen for requests on.")
 	port := flag.Int("port", 8080, "The port to listen for requests on.")
+	timeout_seconds := flag.Int("timeout", 30, "The maximum number of seconds to allow for fetching a given tile")
 
 	flag.Parse()
 
@@ -37,8 +39,11 @@ func main() {
 
 	go_cache, err := cache.NewGoCache(cache_opts)
 
+	timeout := time.Duration(*timeout_seconds) * time.Second
+
 	proxy_opts := &http.TilezenProxyHandlerOptions{
-		Cache: go_cache,
+		Cache:   go_cache,
+		Timeout: timeout,
 	}
 
 	proxy_handler, err := http.TilezenProxyHandler(proxy_opts)
