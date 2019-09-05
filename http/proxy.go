@@ -50,6 +50,8 @@ func TilezenProxyHandler(proxy_opts *TilezenProxyHandlerOptions) (gohttp.Handler
 			return
 		}
 
+		defer t_rsp.Close()
+		
 		_, err = io.Copy(rsp, t_rsp)
 
 		if err != nil {
