@@ -8,9 +8,9 @@ Work in progress.
 
 ```
 import (
-	"net/http"
 	tz_http "github.com/sfomuseum/go-http-tilezen/http"
-	"github.com/whosonfirst/go-cache-blob"	
+	"github.com/whosonfirst/go-cache-blob"
+	"net/http"	
 )
 
 func main() {
