@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/sfomuseum/go-http-tilezen/http"
@@ -21,6 +22,8 @@ func main() {
 
 	flag.Parse()
 
+	ctx := context.Background()
+
 	mux := gohttp.NewServeMux()
 
 	ping_handler, err := http.PingHandler()
@@ -31,13 +34,7 @@ func main() {
 
 	mux.Handle("/ping", ping_handler)
 
-	cache_opts, err := cache.DefaultGoCacheOptions()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	go_cache, err := cache.NewGoCache(cache_opts)
+	go_cache, err := cache.NewCache(ctx, "gocache://")
 
 	timeout := time.Duration(*timeout_seconds) * time.Second
 
