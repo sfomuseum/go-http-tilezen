@@ -26,6 +26,8 @@ github.com/sfomuseum/go-tilezen v0.0.1 h1:U8PoDuuFJmy+d9q1n4wzgcgyBzjMxlDNQkvkqr
 github.com/sfomuseum/go-tilezen v0.0.1/go.mod h1:iQu5CGmTlyU25Xt2fdwaMmqLwiVm0+k/rL/5/WljDUo=
 github.com/sfomuseum/go-tilezen v0.0.2 h1:sXJt3HnXZVTyfDjrGhXjC4flBFlJJI2N06faYhcamZw=
 github.com/sfomuseum/go-tilezen v0.0.2/go.mod h1:pA7ltffLr0bGgVQUQH57XlhpsTF/pXbqMfNCny5QSHg=
+github.com/sfomuseum/go-tilezen v0.0.3 h1:B6BSBHTtno1MvtTMyNRhIK+MMaBQOml0AFoz+Uw8u5o=
+github.com/sfomuseum/go-tilezen v0.0.3/go.mod h1:pA7ltffLr0bGgVQUQH57XlhpsTF/pXbqMfNCny5QSHg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/tidwall/gjson v1.3.2 h1:+7p3qQFaH3fOMXAJSrdZwGKcOO/lYdGS0HqGhPqDdTI=
