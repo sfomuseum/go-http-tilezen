@@ -3,22 +3,18 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
-	"github.com/aaronland/go-http-ping"	
+	"github.com/aaronland/go-http-ping"
+	"github.com/aaronland/go-http-server"		
 	"github.com/sfomuseum/go-http-tilezen/http"
-	"github.com/sfomuseum/go-http-tilezen/server"
 	"github.com/whosonfirst/go-cache"
 	"log"
 	gohttp "net/http"
-	gourl "net/url"
 	"time"
 )
 
 func main() {
 
-	var proto = flag.String("protocol", "http", "The protocol for placeholder-client server to listen on. Valid protocols are: http, lambda.")
-	host := flag.String("host", "localhost", "The host to listen for requests on.")
-	port := flag.Int("port", 8080, "The port to listen for requests on.")
+	server_uri := flag.String("server-uri", "http://localhost:8080", "A valid aaronland/go-http-server URI.")
 	timeout_seconds := flag.Int("timeout", 30, "The maximum number of seconds to allow for fetching a given tile")
 
 	flag.Parse()
@@ -52,23 +48,15 @@ func main() {
 
 	mux.Handle("/", proxy_handler)
 
-	address := fmt.Sprintf("http://%s:%d", *host, *port)
-
-	u, err := gourl.Parse(address)
+	s, err := server.NewServer(ctx, *server_uri)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to create server for '%s', %v", *server_uri, err)
 	}
-
-	s, err := server.NewStaticServer(*proto, u)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	
 	log.Printf("Listening on %s\n", s.Address())
 
-	err = s.ListenAndServe(mux)
+	err = s.ListenAndServe(ctx, mux)
 
 	if err != nil {
 		log.Fatal(err)
