@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/aaronland/go-http-ping"	
 	"github.com/sfomuseum/go-http-tilezen/http"
 	"github.com/sfomuseum/go-http-tilezen/server"
 	"github.com/whosonfirst/go-cache"
@@ -26,7 +27,7 @@ func main() {
 
 	mux := gohttp.NewServeMux()
 
-	ping_handler, err := http.PingHandler()
+	ping_handler, err := ping.PingHandler()
 
 	if err != nil {
 		log.Fatal(err)

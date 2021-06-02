@@ -1,4 +1,6 @@
-# github.com/aaronland/go-roster v0.0.1
+# github.com/aaronland/go-http-ping v1.0.0
+github.com/aaronland/go-http-ping
+# github.com/aaronland/go-roster v0.0.2
 github.com/aaronland/go-roster
 # github.com/aws/aws-lambda-go v1.10.0
 github.com/aws/aws-lambda-go/events
@@ -26,5 +28,5 @@ github.com/tidwall/match
 github.com/tidwall/pretty
 # github.com/whosonfirst/algnhsa v0.1.0
 github.com/whosonfirst/algnhsa
-# github.com/whosonfirst/go-cache v0.0.2
+# github.com/whosonfirst/go-cache v0.2.0
 github.com/whosonfirst/go-cache
