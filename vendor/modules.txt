@@ -1,12 +1,14 @@
-# github.com/aaronland/go-http-ping v1.0.0
+# github.com/aaronland/go-http-ping/v2 v2.0.0
 ## explicit
-github.com/aaronland/go-http-ping
-# github.com/aaronland/go-http-server v0.0.6
+github.com/aaronland/go-http-ping/v2
+# github.com/aaronland/go-http-server v1.0.0
 ## explicit
 github.com/aaronland/go-http-server
-# github.com/aaronland/go-roster v0.0.2
+# github.com/aaronland/go-roster v1.0.0
 github.com/aaronland/go-roster
-# github.com/aws/aws-lambda-go v1.10.0
+# github.com/akrylysov/algnhsa v0.12.1
+github.com/akrylysov/algnhsa
+# github.com/aws/aws-lambda-go v1.9.0
 github.com/aws/aws-lambda-go/events
 github.com/aws/aws-lambda-go/lambda
 github.com/aws/aws-lambda-go/lambda/handlertrace
@@ -16,25 +18,23 @@ github.com/aws/aws-lambda-go/lambdacontext
 github.com/jtacoma/uritemplates
 # github.com/patrickmn/go-cache v2.1.0+incompatible
 github.com/patrickmn/go-cache
-# github.com/paulmach/orb v0.2.2
+# github.com/paulmach/orb v0.7.1
 github.com/paulmach/orb
 github.com/paulmach/orb/clip
 github.com/paulmach/orb/geojson
 github.com/paulmach/orb/internal/mercator
 github.com/paulmach/orb/maptile
-# github.com/sfomuseum/go-tilezen v0.0.4
+# github.com/sfomuseum/go-tilezen v0.0.6
 ## explicit
 github.com/sfomuseum/go-tilezen
-# github.com/tidwall/gjson v1.8.0
+# github.com/tidwall/gjson v1.14.2
 github.com/tidwall/gjson
-# github.com/tidwall/match v1.0.3
+# github.com/tidwall/match v1.1.1
 github.com/tidwall/match
-# github.com/tidwall/pretty v1.1.0
+# github.com/tidwall/pretty v1.2.0
 github.com/tidwall/pretty
-# github.com/whosonfirst/algnhsa v0.1.0
-github.com/whosonfirst/algnhsa
-# github.com/whosonfirst/go-cache v0.5.0
+# github.com/whosonfirst/go-cache v0.5.1
 ## explicit
 github.com/whosonfirst/go-cache
-# github.com/whosonfirst/go-ioutil v1.0.0
+# github.com/whosonfirst/go-ioutil v1.0.2
 github.com/whosonfirst/go-ioutil
